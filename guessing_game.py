@@ -6,7 +6,6 @@ import speech_recognition as sr
 
 def recognize_speech_from_mic(recognizer, microphone):
     """Transcribe speech from recorded from `microphone`.
-
     Returns a dictionary with three keys:
     "success": a boolean indicating whether or not the API request was
                successful
@@ -66,11 +65,7 @@ if __name__ == "__main__":
     word = random.choice(WORDS)
 
     # format the instructions string
-    instructions = (
-        "I'm thinking of one of these words:\n"
-        "{words}\n"
-        "You have {n} tries to guess which one.\n"
-    ).format(words=', '.join(WORDS), n=NUM_GUESSES)
+    instructions = (f"I'm thinking of one of these words:\n{', '.join(WORDS)}\nYou have {NUM_GUESSES} tries to guess which one.\n")
 
     # show instructions and wait 3 seconds before starting the game
     print(instructions)
@@ -86,7 +81,7 @@ if __name__ == "__main__":
         #     re-prompt the user to say their guess again. Do this up
         #     to PROMPT_LIMIT times
         for j in range(PROMPT_LIMIT):
-            print('Guess {}. Speak!'.format(i+1))
+            print(f'Guess {i+1}. Speak!')
             guess = recognize_speech_from_mic(recognizer, microphone)
             if guess["transcription"]:
                 break
@@ -96,11 +91,11 @@ if __name__ == "__main__":
 
         # if there was an error, stop the game
         if guess["error"]:
-            print("ERROR: {}".format(guess["error"]))
+            print(f"ERROR: {guess['error']}")
             break
 
         # show the user the transcription
-        print("You said: {}".format(guess["transcription"]))
+        print(f"You said: {guess['transcription']}")
 
         # determine if guess is correct and if any attempts remain
         guess_is_correct = guess["transcription"].lower() == word.lower()
@@ -110,10 +105,10 @@ if __name__ == "__main__":
         # if not, repeat the loop if user has more attempts
         # if no attempts left, the user loses the game
         if guess_is_correct:
-            print("Correct! You win!".format(word))
+            print("Correct! You win!")
             break
         elif user_has_more_attempts:
             print("Incorrect. Try again.\n")
         else:
-            print("Sorry, you lose!\nI was thinking of '{}'.".format(word))
+            print(f"Sorry, you lose!\nI was thinking of '{word}'.")
             break
